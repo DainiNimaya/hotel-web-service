@@ -1,10 +1,7 @@
 package com.boltan.hotelweb.entity;
 
 import com.boltan.hotelweb.enums.Role;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -15,6 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "user")
+@ToString
 
 public class UserEntity {
 
@@ -29,6 +27,9 @@ public class UserEntity {
     private String lastName;
 
     @Column(length = 255, unique = true, nullable = false)
+    private String username;
+
+    @Column(length = 255, nullable = false)
     private String email;
 
     @Column(length = 255)
@@ -39,5 +40,5 @@ public class UserEntity {
 
     @Enumerated(EnumType.STRING)
     private Role userRole;
-    
+
 }

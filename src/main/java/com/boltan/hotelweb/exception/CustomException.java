@@ -8,10 +8,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class CustomException extends RuntimeException{
-    private int status;
+    private boolean status;
     private String message;
 
-    public CustomException(int status,String message) {
+    public CustomException(boolean status,String message) {
         super(message);
         this.status = status;
         this.message = message;

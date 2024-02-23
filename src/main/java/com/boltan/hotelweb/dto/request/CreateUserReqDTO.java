@@ -1,4 +1,4 @@
-package com.boltan.hotelweb.dto;
+package com.boltan.hotelweb.dto.request;
 
 import com.boltan.hotelweb.enums.Role;
 import lombok.*;
@@ -9,9 +9,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class UserDTO {
+public class CreateUserReqDTO {
 
-    private long id;
     private String firstName;
     private String lastName;
     private String email;
