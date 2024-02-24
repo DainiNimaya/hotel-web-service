@@ -1,0 +1,27 @@
+.background-img{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  opacity: 0.6;
+  overflow: hidden;
+}
+
+.login-right{
+  background-color: #074a52d1 !important;
+}
+
+.login-left{
+  background: #00000030;
+}
+
+.login-left .card-body form h1, .login-left .card-body form p{
+  color: white !important;
+}
+
+
+.btn-login{
+  font-weight: 500;
+  color: #ffffff !important;
+}
