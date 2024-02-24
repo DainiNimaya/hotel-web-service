@@ -54,4 +54,10 @@ public class UserController {
                 HttpStatus.OK);
     }
 
+    @GetMapping(value = "/search-history/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CommonResponseDTO> getUserSearchHistory(@PathVariable("username") String  username){
+        return new ResponseEntity<>(new CommonResponseDTO(true, "get user search history", userService.getUserSearchhistory(username)),
+                HttpStatus.OK);
+    }
+
 }

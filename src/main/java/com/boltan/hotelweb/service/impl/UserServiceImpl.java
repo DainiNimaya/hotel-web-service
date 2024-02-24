@@ -1,11 +1,13 @@
 package com.boltan.hotelweb.service.impl;
 
+import com.boltan.hotelweb.dto.SearchHistoryDTO;
 import com.boltan.hotelweb.dto.UserDTO;
 import com.boltan.hotelweb.dto.request.CreateUserReqDTO;
 import com.boltan.hotelweb.dto.request.LoginReqDTO;
 import com.boltan.hotelweb.dto.response.TokenResponseDTO;
 import com.boltan.hotelweb.entity.UserEntity;
 import com.boltan.hotelweb.exception.CustomException;
+import com.boltan.hotelweb.repository.SearchHistoryRepository;
 import com.boltan.hotelweb.repository.UserRepository;
 import com.boltan.hotelweb.service.UserService;
 import com.boltan.hotelweb.utils.EmailValidator;
@@ -33,6 +35,7 @@ import static com.google.common.hash.Hashing.sha256;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final SearchHistoryRepository searchHistoryRepository;
     private final ModelMapper modelMapper;
     private final JWTManager jwtManager;
 
@@ -124,5 +127,11 @@ public class UserServiceImpl implements UserService {
     public List<UserDTO> getAllUsers() {
         List<UserDTO> allUsers = userRepository.getAllUsers();
         return allUsers;
+    }
+
+    @Override
+    public List<SearchHistoryDTO> getUserSearchhistory(String username) {
+        List<SearchHistoryDTO> searchHistory = searchHistoryRepository.getUserSearchHistory(username);
+        return searchHistory;
     }
 }

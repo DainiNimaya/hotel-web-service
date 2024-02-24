@@ -1,5 +1,6 @@
 package com.boltan.hotelweb.service;
 
+import com.boltan.hotelweb.dto.SearchHistoryDTO;
 import com.boltan.hotelweb.dto.UserDTO;
 import com.boltan.hotelweb.dto.request.CreateUserReqDTO;
 import com.boltan.hotelweb.dto.request.LoginReqDTO;
@@ -18,4 +19,6 @@ public interface UserService {
     CreateUserReqDTO updateUser(CreateUserReqDTO dto);
 
     List<UserDTO> getAllUsers();
+
+    List<SearchHistoryDTO> getUserSearchhistory(String username);
 }
