@@ -20,4 +20,12 @@ public class UserDTO {
     private String password;
     private Role userRole;
 
+    public UserDTO(long id, String firstName, String lastName, String email, String mobileNumber, Role userRole) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.mobileNumber = mobileNumber;
+        this.userRole = userRole;
+    }
 }

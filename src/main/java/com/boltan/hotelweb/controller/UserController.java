@@ -36,4 +36,22 @@ public class UserController {
                 HttpStatus.OK);
     }
 
+    @GetMapping(value = "/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CommonResponseDTO> getUserDetails(@PathVariable("username") String  username){
+        return new ResponseEntity<>(new CommonResponseDTO(true, "Get user detail successful", userService.getUser(username)),
+                HttpStatus.OK);
+    }
+
+    @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE} )
+    public ResponseEntity<CommonResponseDTO> updateUser(@RequestBody CreateUserReqDTO dto){
+        return new ResponseEntity<>(new CommonResponseDTO(true, "The user profile has been successfully updated.", userService.updateUser(dto)),
+                HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CommonResponseDTO> getAllUsers(){
+        return new ResponseEntity<>(new CommonResponseDTO(true, "get all user details success", userService.getAllUsers()),
+                HttpStatus.OK);
+    }
+
 }

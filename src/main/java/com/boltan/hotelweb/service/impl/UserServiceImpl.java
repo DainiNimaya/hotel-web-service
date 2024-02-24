@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import static com.google.common.hash.Hashing.sha256;
 
@@ -34,66 +35,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final JWTManager jwtManager;
-
-
-//    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-//
-//        try {
-//            log.info("Start function loadUserByUsername : {}");
-//            Optional<UserEntity> user = userRepository.findByEmail(userId);
-//            if (!user.isPresent()) {
-//                log.error("loadUserByUsername() : invalid credentials");
-//                throw new UsernameNotFoundException("Invalid username or password.");
-//            }
-//            UserEntity userEntity = user.get();
-//            // Assuming user type is an Enum
-//            String roleString = userEntity.getUserRole().toString();
-//
-//            // Create authorities for the user
-//            Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-//            authorities.add(new SimpleGrantedAuthority("ROLE_" + roleString));
-//
-//            return new org.springframework.security.core.userdetails.User(
-//                    userEntity.getEmail(),
-//                    userEntity.getPassword(),
-//                    authorities);
-//        } catch (Exception e) {
-//            log.error("Error in loadUserByUsername: " + e.getMessage(), e);
-//            throw new RuntimeException("An error occurred while loading user details.", e);
-//        }
-//    }
-
-//    private List<SimpleGrantedAuthority> getAuthority(UserEntity user) {
-//        if (user.getUserRole().equals("ACADEMIC_ADMIN")) {
-//            return Arrays.asList(new SimpleGrantedAuthority(user.getUserRole().toString()));
-//        }
-//        throw new UsernameNotFoundException("Access Denied");
-//    }
-//
-//    @Override
-//    public UserDTO getUserDetailsByUserEmail(String userEmail) {
-//        try {
-//            // Check if a user with the given email exists
-//            Optional<UserEntity> byUserEmail = userRepository.findByEmail(userEmail);
-//            if (!byUserEmail.isPresent()) {
-//                throw new CustomOauthException("User email not found.");
-//            } else {
-//                // Create and return UserDto
-//                return new UserDTO(
-//                        byUserEmail.get().getId(),
-//                        byUserEmail.get().getFirstName(),
-//                        byUserEmail.get().getLastName(),
-//                        byUserEmail.get().getEmail(),
-//                        byUserEmail.get().getMobileNumber(),
-//                        byUserEmail.get().getPassword(),
-//                        byUserEmail.get().getUserRole());
-//            }
-//        } catch (Exception e) {
-//            // Log and handle any exceptions
-//            log.error("Method getUserDetailsByUserEmail : " + e.getMessage(), e);
-//            throw e;
-//        }
-//    }
 
     @Override
     public UserDTO createUser(CreateUserReqDTO dto) {
@@ -142,5 +83,46 @@ public class UserServiceImpl implements UserService {
             log.error("Function requestToken : ", e);
             throw e;
         }
+    }
+
+    @Override
+    public UserDTO getUser(String username) {
+        UserEntity user = userRepository.findByUsername(username);
+        if(user == null) throw new CustomException(false, "User not found");
+        UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+        userDTO.setPassword(null);
+        return userDTO;
+    }
+
+    @Override
+    public CreateUserReqDTO updateUser(CreateUserReqDTO dto) {
+        try{
+            log.info("Execute method updateUser");
+
+            UserEntity user = userRepository.findByUsername(dto.getUsername());
+            if(user == null) throw new CustomException(false, "User not found");
+
+            if(dto.getPassword() != null) {
+                String password = sha256().hashString(dto.getPassword(), StandardCharsets.UTF_8).toString();
+                user.setPassword(password);
+            }
+            user.setMobileNumber(dto.getMobileNumber());
+            user.setFirstName(dto.getFirstName());
+            user.setLastName(dto.getLastName());
+            user.setEmail(dto.getEmail());
+
+            userRepository.save(user);
+            dto.setPassword(null);
+            return dto;
+        }catch (Exception e){
+            log.error("Method updateUser : ", e);
+            throw e;
+        }
+    }
+
+    @Override
+    public List<UserDTO> getAllUsers() {
+        List<UserDTO> allUsers = userRepository.getAllUsers();
+        return allUsers;
     }
 }
