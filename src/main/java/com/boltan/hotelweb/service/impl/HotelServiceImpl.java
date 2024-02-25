@@ -31,10 +31,20 @@ public class HotelServiceImpl implements HotelService {
         try{
             List<HotelDTO> hotelList =  new ArrayList<>();
             SearchHistoryDTO searchDto = searchHistoryService.createSearchHistory(dto,type);
-            hotelList = type == "BOOKING" ? bookingScrape.getDetails(dto) : airBnbScrape.getDetails(dto);
+            switch (type){
+                case "BOOKING":
+                    hotelList = bookingScrape.getDetails(dto);
+                    break;
+                case "HOTELS":
+                    hotelList = bookingScrape.getDetails(dto);
+                    break;
+                case "AIRBNB":
+                    hotelList = airBnbScrape.getDetails(dto);
+                    break;
+            }
             return hotelList;
         }catch (Exception e){
-            log.error("Function createUser : ", e);
+            log.error("Function getHotelDetails : ", e);
             throw e;
         }
     }

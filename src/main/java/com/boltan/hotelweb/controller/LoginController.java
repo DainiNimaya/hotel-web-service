@@ -29,7 +29,7 @@ public class LoginController {
     public ResponseEntity<CommonResponseDTO> requestToken(@RequestBody LoginReqDTO dto){
         log.info("Start function loadUserByUsername : {}");
         TokenResponseDTO requestToken = userService.requestToken(dto);
-        return new ResponseEntity<>(new CommonResponseDTO(true, "The use verification successful.",requestToken ),
+        return new ResponseEntity<>(new CommonResponseDTO(true, "The login verification successful.",requestToken ),
                 HttpStatus.OK);
     }
 

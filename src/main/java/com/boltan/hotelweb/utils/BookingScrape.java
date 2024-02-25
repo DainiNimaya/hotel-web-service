@@ -25,7 +25,7 @@ public class BookingScrape {
             Elements hotels = document.select(".c066246e13");
             for(Element hotel: hotels){
 
-                String name = hotel.select(".c066246e13 > div > div > div > div > div > div > div > div > h3 > a > div ").text();
+                String name = hotel.select(".c066246e13 > div > div > div > div > div > div > div > div > h3 > a > .f6431b446c ").text();
                 String imgUrl = hotel.select(".c066246e13 > div > div > a > img").attr("src");
                 String location = dto.getLocation();
 

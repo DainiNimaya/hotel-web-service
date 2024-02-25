@@ -22,16 +22,9 @@ public class HotelController {
         this.hotelService = hotelService;
     }
 
-    @GetMapping(value = "/booking", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CommonResponseDTO> getUserDetailsBooking(@RequestBody HotelReqDTO dto){
-        return new ResponseEntity<>(new CommonResponseDTO(true, "Get hotel details from booking.com", hotelService.getHotelDetails(dto,"BOOKING")),
+    @PostMapping(value = "/{type}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CommonResponseDTO> getUserDetailsBooking(@PathVariable("type") String  type, @RequestBody HotelReqDTO dto){
+        return new ResponseEntity<>(new CommonResponseDTO(true, "Get hotel details from booking.com", hotelService.getHotelDetails(dto,type)),
                 HttpStatus.OK);
     }
-
-    @GetMapping(value = "/airbnb", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CommonResponseDTO> getUserDetailsAirbnb(@RequestBody HotelReqDTO dto){
-        return new ResponseEntity<>(new CommonResponseDTO(true, "Get hotel details from airbnb.com", hotelService.getHotelDetails(dto,"AIRBNB")),
-                HttpStatus.OK);
-    }
-
 }
