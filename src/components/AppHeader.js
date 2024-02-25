@@ -42,10 +42,19 @@ const AppHeader = () => {
             </CNavLink>
           </CNavItem>
           <CNavItem>
-            <CNavLink href="#">Users</CNavLink>
+            <CNavLink to="/booking-site" component={NavLink}>
+              Booking.com
+            </CNavLink>
           </CNavItem>
           <CNavItem>
-            <CNavLink href="#">Settings</CNavLink>
+            <CNavLink to="/airbnb-site" component={NavLink}>
+              Airbnb.com
+            </CNavLink>
+          </CNavItem>
+          <CNavItem>
+            <CNavLink to="/hotels-site" component={NavLink}>
+              Hotels.com
+            </CNavLink>
           </CNavItem>
         </CHeaderNav>
         <CHeaderNav>

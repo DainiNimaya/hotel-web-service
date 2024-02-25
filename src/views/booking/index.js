@@ -29,6 +29,7 @@ class Booking extends React.Component {
     room: 0,
     age: 10,
     data: [],
+    searchClick: false,
   }
 
   componentDidMount() {
@@ -36,11 +37,12 @@ class Booking extends React.Component {
   }
 
   onChangeAction = (e) => {
-    console.log(e)
+    this.setState({
+      [e.target.name]: e.target.value,
+    })
   }
 
   onChangeDate = (value, dateString) => {
-    console.log(value, dateString)
     this.setState({
       bookingDate: value,
     })
@@ -66,10 +68,13 @@ class Booking extends React.Component {
     const result = await API.getSearchDetail({ location, bookingDate, adult, children, room, age })
     await this.setState({
       data: result,
+      searchClick: true,
     })
   }
 
   render() {
+    const { location, bookingDate, adult, children, room, age } = this.state
+    console.log(location, bookingDate, adult, children, room, age)
     return (
       <CCard>
         <CCardBody>
@@ -103,11 +108,19 @@ class Booking extends React.Component {
             </CCol>
             <CCol xs={2}>
               <CFormLabel>Children Count</CFormLabel>
-              <CFormInput value={this.state.children} />
+              <CFormInput
+                value={this.state.children}
+                name="children"
+                onChange={(e) => this.onChangeAction(e)}
+              />
             </CCol>
             <CCol xs={2}>
               <CFormLabel>Room Count</CFormLabel>
-              <CFormInput value={this.state.room} />
+              <CFormInput
+                value={this.state.room}
+                name="room"
+                onChange={(e) => this.onChangeAction(e)}
+              />
             </CCol>
           </CRow>
           <CRow>
