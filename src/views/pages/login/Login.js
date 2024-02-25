@@ -17,6 +17,8 @@ import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import './style.css'
 import image from './../../../assets/hotel/bgImg.jpg'
+import * as API from '../../../service/RegisterService'
+import Swal from 'sweetalert2'
 
 const Login = () => {
   const [username, setUsername] = useState('')
@@ -30,10 +32,15 @@ const Login = () => {
       : loginAction()
   }
 
-  const loginAction = () => {
+  const loginAction = async () => {
     const data = { username, password }
-    console.log(data)
-    window.open('/dashboard')
+    let result = await API.loginAction(data)
+    if (result) {
+      window.location = 'http://localhost:3000/#/dashboard'
+      // Swal.fire('Saved!', 'Registration successful..', 'success')
+    } else {
+      Swal.fire('Oops!', 'Something went wrong..', 'error')
+    }
   }
 
   return (

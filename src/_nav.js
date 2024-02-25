@@ -32,6 +32,18 @@ const _nav = [
     to: '/booking-site',
     icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
+  {
+    component: CNavItem,
+    name: 'Airbnb.com',
+    to: '/airbnb-site',
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Hotels.com',
+    to: '/hotels-site',
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  },
   // {
   //   component: CNavTitle,
   //   name: 'Theme',

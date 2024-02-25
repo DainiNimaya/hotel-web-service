@@ -52,8 +52,14 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
 const Booking = React.lazy(() => import('./views/booking'))
 
+const Airbnb = React.lazy(() => import('./views/airbnb'))
+
+const Hotels = React.lazy(() => import('./views/hotels'))
+
 const routes = [
   { path: '/booking-site', name: 'Booking Site', element: Booking },
+  { path: '/airbnb-site', name: 'Airbnb Site', element: Airbnb },
+  { path: '/hotels-site', name: 'Hotels Site', element: Hotels },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
   { path: '/theme', name: 'Theme', element: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', element: Colors },

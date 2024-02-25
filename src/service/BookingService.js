@@ -14,7 +14,7 @@ export const getSearchDetail = async (data) => {
   }
   const temp = await axios({
     method: 'post',
-    url: 'http://localhost:8081/api/v1/hotel/booking',
+    url: 'http://localhost:8081/api/v1/hotel/BOOKING',
     data: data1,
   }).then(async (response) => {
     let result = await response.data.object

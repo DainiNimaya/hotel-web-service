@@ -13,6 +13,10 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
+import * as API from '../../../service/RegisterService'
+import { EMAIL_REGEX } from '../../../utils/validation'
+import { isPossiblePhoneNumber } from 'react-phone-number-input'
+import Swal from 'sweetalert2'
 
 const Register = () => {
   const [username, setUsername] = useState('')
@@ -27,27 +31,34 @@ const Register = () => {
       ? alert('Please enter the name')
       : username === ''
       ? alert('Please enter the username')
-      : email === ''
-      ? alert('Please enter the email')
-      : mobile === ''
-      ? alert('Please enter the mobile')
+      : email === '' || !EMAIL_REGEX.test(email)
+      ? alert('Please enter a valid email')
+      : mobile === '' || isPossiblePhoneNumber(mobile)
+      ? alert('Please enter a valid mobile')
       : password === ''
       ? alert('Please enter the password')
-      : password === re_password
+      : password !== re_password
       ? alert('Please enter the re-password correctly')
       : registerUser()
   }
 
-  const registerUser = () => {
+  const registerUser = async () => {
     const data = {
       firstName: name,
+      lastName: '',
       mobileNumber: mobile,
       email,
       username,
       password,
       userRole: 'USER',
     }
-    console.log(data)
+    const result = await API.registerUser(data)
+    if (result) {
+      window.location = 'http://localhost:3000/#/login'
+      Swal.fire('Saved!', 'Registration successful..', 'success')
+    } else {
+      Swal.fire('Oops!', 'Something went wrong..', 'error')
+    }
   }
 
   return (
@@ -102,6 +113,7 @@ const Register = () => {
                       <CInputGroup className="mb-3">
                         <CInputGroupText>@</CInputGroupText>
                         <CFormInput
+                          type="number"
                           placeholder="Mobile"
                           value={mobile}
                           onChange={(e) => setMobile(e.target.value)}
