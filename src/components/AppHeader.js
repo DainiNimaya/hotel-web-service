@@ -37,23 +37,28 @@ const AppHeader = () => {
         </CHeaderBrand>
         <CHeaderNav className="d-none d-md-flex me-auto">
           <CNavItem>
-            <CNavLink to="/dashboard" component={NavLink}>
-              Dashboard
-            </CNavLink>
-          </CNavItem>
-          <CNavItem>
             <CNavLink to="/booking-site" component={NavLink}>
-              Booking.com
+              <h6>Booking.com</h6>
             </CNavLink>
           </CNavItem>
           <CNavItem>
             <CNavLink to="/airbnb-site" component={NavLink}>
-              Airbnb.com
+              <h6>Airbnb.com</h6>
             </CNavLink>
           </CNavItem>
           <CNavItem>
             <CNavLink to="/hotels-site" component={NavLink}>
-              Hotels.com
+              <h6>Hotels.com</h6>
+            </CNavLink>
+          </CNavItem>
+          <CNavItem>
+            <CNavLink to="/compare" component={NavLink}>
+              <h6>Compare Hotels</h6>
+            </CNavLink>
+          </CNavItem>
+          <CNavItem>
+            <CNavLink to="/history" component={NavLink}>
+              <h6>History</h6>
             </CNavLink>
           </CNavItem>
         </CHeaderNav>

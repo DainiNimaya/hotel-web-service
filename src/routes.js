@@ -58,11 +58,14 @@ const Hotels = React.lazy(() => import('./views/hotels'))
 
 const History = React.lazy(() => import('./views/searchHistory'))
 
+const CompareDetails = React.lazy(() => import('./views/compare'))
+
 const routes = [
   { path: '/booking-site', name: 'Booking Site', element: Booking },
   { path: '/airbnb-site', name: 'Airbnb Site', element: Airbnb },
   { path: '/hotels-site', name: 'Hotels Site', element: Hotels },
   { path: '/history', name: 'Search History', element: History },
+  { path: '/compare', name: 'Compare Details', element: CompareDetails },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
   { path: '/theme', name: 'Theme', element: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', element: Colors },
