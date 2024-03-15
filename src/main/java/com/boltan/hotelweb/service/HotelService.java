@@ -8,4 +8,6 @@ import java.util.List;
 public interface HotelService {
 
     List<HotelDTO> getHotelDetails(HotelReqDTO dto,String type);
+
+    List<HotelDTO> shareHotelDetails(HotelReqDTO dto,String type);
 }

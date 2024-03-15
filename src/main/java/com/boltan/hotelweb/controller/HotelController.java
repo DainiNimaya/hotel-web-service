@@ -24,7 +24,15 @@ public class HotelController {
 
     @PostMapping(value = "/{type}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CommonResponseDTO> getUserDetailsBooking(@PathVariable("type") String  type, @RequestBody HotelReqDTO dto){
-        return new ResponseEntity<>(new CommonResponseDTO(true, "Get hotel details from booking.com", hotelService.getHotelDetails(dto,type)),
+        String text = type.equalsIgnoreCase("BOOKING") ? "booking" : type.equalsIgnoreCase("AIRBNB") ? "airbnb" : "hotels";
+        return new ResponseEntity<>(new CommonResponseDTO(true, "Get hotel details from "+text+".com", hotelService.getHotelDetails(dto,type)),
+                HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/share-api/{type}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CommonResponseDTO> shareHotelDetails(@PathVariable("type") String  type, @RequestBody HotelReqDTO dto){
+        String text = type.equalsIgnoreCase("BOOKING") ? "booking" : type.equalsIgnoreCase("AIRBNB") ? "airbnb" : "hotels";
+        return new ResponseEntity<>(new CommonResponseDTO(true, "Share hotel details of "+text+".com", hotelService.getHotelDetails(dto,type)),
                 HttpStatus.OK);
     }
 }

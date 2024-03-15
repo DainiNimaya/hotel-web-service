@@ -3,6 +3,10 @@ package com.boltan.hotelweb.service.impl;
 import com.boltan.hotelweb.dto.HotelDTO;
 import com.boltan.hotelweb.dto.SearchHistoryDTO;
 import com.boltan.hotelweb.dto.request.HotelReqDTO;
+import com.boltan.hotelweb.entity.UserEntity;
+import com.boltan.hotelweb.enums.Role;
+import com.boltan.hotelweb.exception.CustomException;
+import com.boltan.hotelweb.repository.UserRepository;
 import com.boltan.hotelweb.service.HotelService;
 import com.boltan.hotelweb.service.SearchHistoryService;
 import com.boltan.hotelweb.utils.AirBnbScrape;
@@ -27,10 +31,19 @@ public class HotelServiceImpl implements HotelService {
     private final AirBnbScrape airBnbScrape;
     private final HotelsScrape hotelsScrape;
     private final SearchHistoryService searchHistoryService;
+    private final UserRepository userRepository;
 
     @Override
     public List<HotelDTO> getHotelDetails(HotelReqDTO dto,String type) {
         try{
+
+            log.info("Execute method getHotelDetails");
+
+            UserEntity user = userRepository.findByUsername(dto.getUsername());
+            if(user == null) throw new CustomException(false, "User not found");
+
+            if(user.getStatus().equalsIgnoreCase("INACTIVE")) throw new CustomException(false, "User is not active");
+
             List<HotelDTO> hotelList =  new ArrayList<>();
             SearchHistoryDTO searchDto = searchHistoryService.createSearchHistory(dto,type);
             switch (type){
@@ -44,6 +57,25 @@ public class HotelServiceImpl implements HotelService {
                     hotelList = airBnbScrape.getDetails(dto);
                     break;
             }
+            return hotelList;
+        }catch (Exception e){
+            log.error("Function getHotelDetails : ", e);
+            throw e;
+        }
+    }
+
+    @Override
+    public List<HotelDTO> shareHotelDetails(HotelReqDTO dto, String type) {
+        try{
+
+            log.info("Execute method shareHotelDetails");
+
+            UserEntity user = userRepository.findByUsername(dto.getUsername());
+            if(user == null) throw new CustomException(false, "User not found");
+
+            if(!user.getUserRole().equals(Role.OTHER)) throw new CustomException(false, "User role is no valid");
+
+            List<HotelDTO> hotelList =  getHotelDetails(dto, type);
             return hotelList;
         }catch (Exception e){
             log.error("Function getHotelDetails : ", e);
