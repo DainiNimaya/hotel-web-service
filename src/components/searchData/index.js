@@ -21,7 +21,7 @@ const dateFormat = 'YYYY-MM-DD'
 
 class SearchData extends React.Component {
   state = {
-    location: AREA_LIST[0],
+    location: AREA_LIST[0].value,
     bookingDate: [moment().format(dateFormat), moment().add(3, 'days').format(dateFormat)],
     adult: 1,
     children: 0,
@@ -61,7 +61,7 @@ class SearchData extends React.Component {
 
   searchHotelDetails = async () => {
     const { location, bookingDate, adult, children, room, age } = this.state
-    this.props.search({ location, bookingDate, adult, children, room, age })
+    this.props.search({ age, location, bookingDate, adult, children, room })
   }
 
   render() {

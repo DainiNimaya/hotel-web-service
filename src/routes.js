@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
+const Dashboard = React.lazy(() => import('./views/newDashboard'))
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
 const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
 
@@ -60,7 +60,16 @@ const History = React.lazy(() => import('./views/searchHistory'))
 
 const CompareDetails = React.lazy(() => import('./views/compare'))
 
+const UserDetails = React.lazy(() => import('./views/users'))
+
+const SupplierDetails = React.lazy(() => import('./views/suppliers'))
+
+const Profile = React.lazy(() => import('./views/profile'))
+
 const routes = [
+  { path: '/users', name: 'Users', element: UserDetails },
+  { path: '/profile', name: 'Profile', element: Profile },
+  { path: '/suppliers', name: 'Suppliers', element: SupplierDetails },
   { path: '/booking-site', name: 'Booking Site', element: Booking },
   { path: '/airbnb-site', name: 'Airbnb Site', element: Airbnb },
   { path: '/hotels-site', name: 'Hotels Site', element: Hotels },

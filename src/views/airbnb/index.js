@@ -11,138 +11,127 @@ import {
   CCardTitle,
   CCardImage,
 } from '@coreui/react'
-import { DatePicker } from 'antd'
-import { AREA_LIST } from '../../const/const'
-import * as API from '../../service/BookingService'
-import moment from 'moment'
-import dayjs from 'dayjs'
+import * as API from '../../service/AirBnbService'
+import SearchData from '../../components/searchData'
+import './style.css'
+import Img from '../../assets/hotel/airbnb.png'
 
-const { RangePicker } = DatePicker
-const dateFormat = 'YYYY-MM-DD'
-
-class Booking extends React.Component {
+class AirBnb extends React.Component {
   state = {
-    location: AREA_LIST[0],
-    bookingDate: [moment('2024-02-25'), moment('2024-02-28')],
-    adult: 1,
-    children: 0,
-    room: 0,
-    age: 10,
     data: [],
+    searchClick: false,
   }
 
-  componentDidMount() {
-    this.searchHotelDetails()
-  }
+  componentDidMount() {}
 
-  onChangeAction = (e) => {
-    console.log(e)
-  }
-
-  onChangeDate = (value, dateString) => {
-    console.log(value, dateString)
-    this.setState({
-      bookingDate: value,
-    })
-  }
-
-  validateForm = () => {
-    const { location, bookingDate, adult, children, room } = this.state
-    location.value === ''
-      ? alert('Please select a location')
-      : bookingDate.length === 0
-      ? alert('Please select a date range')
-      : adult === ''
-      ? alert('Please enter the adult count')
-      : children === ''
-      ? alert('Please enter the children count')
-      : room === ''
-      ? alert('Please enter the room count')
-      : this.searchHotelDetails()
-  }
-
-  searchHotelDetails = async () => {
-    const { location, bookingDate, adult, children, room, age } = this.state
-    const result = await API.getSearchDetail({ location, bookingDate, adult, children, room, age })
+  searchHotelDetails = async (data) => {
+    const result = await API.getSearchAirBnbDetail(data)
     await this.setState({
       data: result,
+      searchClick: true,
     })
   }
 
   render() {
     return (
       <CCard>
+        <img src={Img} style={{ width: '135px', height: 'auto', margin: '1rem' }} />
+        <SearchData search={this.searchHotelDetails} />
         <CCardBody>
-          <CRow>
-            <CCol xs={3}>
-              <CFormLabel>Location</CFormLabel>
-              <CFormSelect
-                // aria-label="Default select example"
-                options={AREA_LIST}
-                value={this.state.location}
-                name="location"
-                onChange={(e) => this.onChangeAction(e)}
-              />
-            </CCol>
-            <CCol xs={3}>
-              <CFormLabel>Pick a Date</CFormLabel>
-              <RangePicker
-                defaultValue={[dayjs('2015/01/01', dateFormat), dayjs('2015/01/01', dateFormat)]}
-                value={this.state.bookingDate}
-                onChange={this.onChangeDate}
-                name="bookingDate"
-              />
-            </CCol>
-            <CCol xs={2}>
-              <CFormLabel>Adult Count</CFormLabel>
-              <CFormInput
-                value={this.state.adult}
-                name="adult"
-                onChange={(e) => this.onChangeAction(e)}
-              />
-            </CCol>
-            <CCol xs={2}>
-              <CFormLabel>Children Count</CFormLabel>
-              <CFormInput value={this.state.children} />
-            </CCol>
-            <CCol xs={2}>
-              <CFormLabel>Room Count</CFormLabel>
-              <CFormInput value={this.state.room} />
-            </CCol>
-          </CRow>
-          <CRow>
-            <CCol>
-              <div>
-                <CButton onClick={() => this.validateForm()}>Search</CButton>
-              </div>
-            </CCol>
-          </CRow>
-        </CCardBody>
-        <CCardBody>
-          <CRow>
-            {this.state.data.length !== 0 &&
-              this.state.data.map((item, i) => {
-                return (
-                  <CCol xs={6} key={i}>
-                    <CCard>
-                      <CRow>
-                        <CCol xs={4}>
-                          <CCardImage orientation="top" src={item.imgUrl} />
-                        </CCol>
-                        <CCol xs={8}>
-                          <CCardTitle>{item.name}</CCardTitle>
-                          <CButton href="#">Check Availability</CButton>
-                        </CCol>
-                      </CRow>
-                    </CCard>
-                  </CCol>
-                )
-              })}
-          </CRow>
+          {this.state.searchClick ? (
+            <CRow>
+              {this.state.data.length !== 0 &&
+                this.state.data.map((item, i) => {
+                  return (
+                    <CCol xs={6} key={i} id={'htl-div-1'}>
+                      <CCard>
+                        <CRow>
+                          <CCol xs={4}>
+                            <CCardImage
+                              style={{ width: '130px', height: '110px' }}
+                              orientation="top"
+                              src={item.imgUrl}
+                            />
+                          </CCol>
+                          <CCol xs={8}>
+                            <CCardTitle>{item.name}</CCardTitle>
+                            <p className={'mb-1'}>{item.roomName}</p>
+                            <p>{item.price}</p>
+                            <CButton href="#" size="sm">
+                              Check Availability
+                            </CButton>
+                          </CCol>
+                        </CRow>
+                      </CCard>
+                    </CCol>
+                  )
+                })}
+            </CRow>
+          ) : (
+            <div>
+              <h3>Guest Favorites</h3>
+              <p>Travellers searching for Sri Lanka also booked these</p>
+              <CRow>
+                <CCol xs={4}>
+                  <div id={'booking-img-1'}>
+                    <h5>Kandy</h5>
+                    <img
+                      src={
+                        'https://a0.muscache.com/im/pictures/miso/Hosting-804959254707180514/original/fdba3a5f-da62-4b50-83ea-517639ba1385.jpeg?im_w=720'
+                      }
+                    />
+                  </div>
+                </CCol>
+                <CCol xs={4}>
+                  <div id={'booking-img-1'}>
+                    <h5>Badulla</h5>
+                    <img
+                      src={
+                        'https://a0.muscache.com/im/pictures/miso/Hosting-53163431/original/b795749c-0d45-48b9-b458-120dbfba9794.jpeg?im_w=720'
+                      }
+                    />
+                  </div>
+                </CCol>
+                <CCol xs={4}>
+                  <div id={'booking-img-1'}>
+                    <h5>Negombo</h5>
+                    <img
+                      src={
+                        'https://a0.muscache.com/im/pictures/7be27856-9ea9-424b-81ae-7672e37a5229.jpg?im_w=720'
+                      }
+                    />
+                  </div>
+                </CCol>
+              </CRow>
+              <br />
+              <CRow>
+                <CCol xs={6}>
+                  <div id={'booking-img-1'}>
+                    <h5>Ella</h5>
+                    <img
+                      src={
+                        'https://cf.bstatic.com/xdata/images/city/600x600/685291.jpg?k=df198931295a3a24c278b32556c0779cd74e95a239489a7fe98d89eb2aed72ee&o='
+                      }
+                    />
+                  </div>
+                </CCol>
+                <CCol xs={6}>
+                  <div id={'booking-img-1'}>
+                    <h5>Kandy</h5>
+                    <img
+                      src={
+                        'https://cf.bstatic.com/xdata/images/city/600x600/685330.jpg?k=ee4ac422e47649d2d04a9759dc81fa51f138f477796a8043557e864517ae6f5f&o='
+                      }
+                    />
+                  </div>
+                </CCol>
+              </CRow>
+            </div>
+          )}
         </CCardBody>
       </CCard>
     )
   }
 }
 
-export default Booking
+export default AirBnb

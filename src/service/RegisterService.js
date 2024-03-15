@@ -9,6 +9,24 @@ export const registerUser = async (data) => {
   })
     .then(async (response) => {
       let result = await response.data.success
+      console.log(response)
+      console.log(response.data, response.data.success)
+      console.log(result)
+      return result
+    })
+    .catch((error) => {
+      return false
+    })
+}
+
+export const updateUser = async (data) => {
+  await axios({
+    method: 'put',
+    url: 'http://localhost:8081/api/v1/user',
+    data,
+  })
+    .then(async (response) => {
+      let result = await response.data.success
       return result
     })
     .catch((error) => {

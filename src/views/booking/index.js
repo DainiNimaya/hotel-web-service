@@ -14,6 +14,7 @@ import {
 import * as API from '../../service/BookingService'
 import SearchData from '../../components/searchData'
 import './style.css'
+import Img from './../../assets/hotel/booking.png'
 
 class Booking extends React.Component {
   state = {
@@ -24,7 +25,7 @@ class Booking extends React.Component {
   componentDidMount() {}
 
   searchHotelDetails = async (data) => {
-    const result = await API.getSearchDetail(data)
+    const result = await API.getSearchBookingDetail(data)
     await this.setState({
       data: result,
       searchClick: true,
@@ -34,6 +35,7 @@ class Booking extends React.Component {
   render() {
     return (
       <CCard>
+        <img src={Img} style={{ width: '180px', height: 'auto' }} />
         <SearchData search={this.searchHotelDetails} />
         <CCardBody>
           {this.state.searchClick ? (
@@ -45,13 +47,21 @@ class Booking extends React.Component {
                       <CCard>
                         <CRow>
                           <CCol xs={4}>
-                            <CCardImage orientation="top" src={item.imgUrl} />
+                            <CCardImage
+                              style={{ width: '130px', height: '110px' }}
+                              orientation="top"
+                              src={item.imgUrl}
+                            />
                           </CCol>
                           <CCol xs={8}>
                             <CCardTitle>{item.name}</CCardTitle>
                             <p className={'mb-1'}>{item.roomName}</p>
                             <p>{item.price}</p>
-                            <CButton href="#" size="sm">
+                            <CButton
+                              target="_blank"
+                              href={`https://www.booking.com/hotel/lk/c-1-colombo-fort.html`}
+                              size="sm"
+                            >
                               Check Availability
                             </CButton>
                           </CCol>

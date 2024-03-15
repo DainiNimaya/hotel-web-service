@@ -2,7 +2,7 @@ import axios from 'axios'
 import moment from 'moment'
 import Cookies from 'js-cookie'
 
-export const getSearchBookingDetail = async (data) => {
+export const getSearchHotelsDetail = async (data) => {
   const data1 = {
     username: JSON.parse(Cookies.get('ghh_user')).username,
     location: data.location,
@@ -15,7 +15,7 @@ export const getSearchBookingDetail = async (data) => {
   }
   const temp = await axios({
     method: 'post',
-    url: 'http://localhost:8081/api/v1/hotel/BOOKING',
+    url: 'http://localhost:8081/api/v1/hotel/HOTELS',
     data: data1,
   }).then(async (response) => {
     let result = await response.data.object

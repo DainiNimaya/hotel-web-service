@@ -51,14 +51,11 @@ const Register = () => {
       username,
       password,
       userRole: 'USER',
+      status: 'ACTIVE',
     }
     const result = await API.registerUser(data)
-    if (result) {
-      window.location = 'http://localhost:3000/#/login'
-      Swal.fire('Saved!', 'Registration successful..', 'success')
-    } else {
-      Swal.fire('Oops!', 'Something went wrong..', 'error')
-    }
+    window.location = 'http://localhost:3000/#/login'
+    Swal.fire('Saved!', 'Registration successful..', 'success')
   }
 
   return (

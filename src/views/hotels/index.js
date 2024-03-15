@@ -11,138 +11,126 @@ import {
   CCardTitle,
   CCardImage,
 } from '@coreui/react'
-import { DatePicker } from 'antd'
-import { AREA_LIST } from '../../const/const'
-import * as API from '../../service/BookingService'
-import moment from 'moment'
-import dayjs from 'dayjs'
+import * as API from '../../service/HotelsService'
+import SearchData from '../../components/searchData'
+import './style.css'
+import Img from '../../assets/hotel/hotels.png'
 
-const { RangePicker } = DatePicker
-const dateFormat = 'YYYY-MM-DD'
-
-class Booking extends React.Component {
+class Hotels extends React.Component {
   state = {
-    location: AREA_LIST[0],
-    bookingDate: [moment('2024-02-25'), moment('2024-02-28')],
-    adult: 1,
-    children: 0,
-    room: 0,
-    age: 10,
     data: [],
+    searchClick: false,
   }
 
-  componentDidMount() {
-    this.searchHotelDetails()
-  }
+  componentDidMount() {}
 
-  onChangeAction = (e) => {
-    console.log(e)
-  }
-
-  onChangeDate = (value, dateString) => {
-    console.log(value, dateString)
-    this.setState({
-      bookingDate: value,
-    })
-  }
-
-  validateForm = () => {
-    const { location, bookingDate, adult, children, room } = this.state
-    location.value === ''
-      ? alert('Please select a location')
-      : bookingDate.length === 0
-      ? alert('Please select a date range')
-      : adult === ''
-      ? alert('Please enter the adult count')
-      : children === ''
-      ? alert('Please enter the children count')
-      : room === ''
-      ? alert('Please enter the room count')
-      : this.searchHotelDetails()
-  }
-
-  searchHotelDetails = async () => {
-    const { location, bookingDate, adult, children, room, age } = this.state
-    const result = await API.getSearchDetail({ location, bookingDate, adult, children, room, age })
+  searchHotelDetails = async (data) => {
+    const result = await API.getSearchHotelsDetail(data)
     await this.setState({
       data: result,
+      searchClick: true,
     })
   }
 
   render() {
     return (
       <CCard>
+        <img src={Img} style={{ width: '135px', height: 'auto' }} />
+        <SearchData search={this.searchHotelDetails} />
         <CCardBody>
-          <CRow>
-            <CCol xs={3}>
-              <CFormLabel>Location</CFormLabel>
-              <CFormSelect
-                // aria-label="Default select example"
-                options={AREA_LIST}
-                value={this.state.location}
-                name="location"
-                onChange={(e) => this.onChangeAction(e)}
-              />
-            </CCol>
-            <CCol xs={3}>
-              <CFormLabel>Pick a Date</CFormLabel>
-              <RangePicker
-                defaultValue={[dayjs('2015/01/01', dateFormat), dayjs('2015/01/01', dateFormat)]}
-                value={this.state.bookingDate}
-                onChange={this.onChangeDate}
-                name="bookingDate"
-              />
-            </CCol>
-            <CCol xs={2}>
-              <CFormLabel>Adult Count</CFormLabel>
-              <CFormInput
-                value={this.state.adult}
-                name="adult"
-                onChange={(e) => this.onChangeAction(e)}
-              />
-            </CCol>
-            <CCol xs={2}>
-              <CFormLabel>Children Count</CFormLabel>
-              <CFormInput value={this.state.children} />
-            </CCol>
-            <CCol xs={2}>
-              <CFormLabel>Room Count</CFormLabel>
-              <CFormInput value={this.state.room} />
-            </CCol>
-          </CRow>
-          <CRow>
-            <CCol>
-              <div>
-                <CButton onClick={() => this.validateForm()}>Search</CButton>
-              </div>
-            </CCol>
-          </CRow>
-        </CCardBody>
-        <CCardBody>
-          <CRow>
-            {this.state.data.length !== 0 &&
-              this.state.data.map((item, i) => {
-                return (
-                  <CCol xs={6} key={i}>
-                    <CCard>
-                      <CRow>
-                        <CCol xs={4}>
-                          <CCardImage orientation="top" src={item.imgUrl} />
-                        </CCol>
-                        <CCol xs={8}>
-                          <CCardTitle>{item.name}</CCardTitle>
-                          <CButton href="#">Check Availability</CButton>
-                        </CCol>
-                      </CRow>
-                    </CCard>
-                  </CCol>
-                )
-              })}
-          </CRow>
+          {this.state.searchClick ? (
+            <CRow>
+              {this.state.data.length !== 0 &&
+                this.state.data.map((item, i) => {
+                  return (
+                    <CCol xs={6} key={i} id={'htl-div-1'}>
+                      <CCard>
+                        <CRow>
+                          <CCol xs={4}>
+                            <CCardImage
+                              style={{ width: '130px', height: '110px' }}
+                              orientation="top"
+                              src={item.imgUrl}
+                            />
+                          </CCol>
+                          <CCol xs={8}>
+                            <CCardTitle>{item.name}</CCardTitle>
+                            <p className={'mb-1'}>{item.roomName}</p>
+                            <p>{item.price}</p>
+                            <CButton href="#" size="sm">
+                              Check Availability
+                            </CButton>
+                          </CCol>
+                        </CRow>
+                      </CCard>
+                    </CCol>
+                  )
+                })}
+            </CRow>
+          ) : (
+            <div>
+              <h3>Discover your new favourite stay</h3>
+              <CRow>
+                <CCol xs={4}>
+                  <div id={'booking-img-1'}>
+                    <h5>Villa</h5>
+                    <img
+                      src={
+                        'https://forever.travel-assets.com/flex/flexmanager/images/2023/11/24/VRBO_APFT2_BARCELONA_THERIN_HOUSE_1_1439.jpg?impolicy=fcrop&h=590&w=448&q=mediumHigh'
+                      }
+                    />
+                  </div>
+                </CCol>
+                <CCol xs={4}>
+                  <div id={'booking-img-1'}>
+                    <h5>Apartment</h5>
+                    <img
+                      src={
+                        'https://forever.travel-assets.com/flex/flexmanager/images/2023/11/27/5bb7f1c3-dd6c-465f-90e8-ac07b9a66ba5.jpeg?impolicy=fcrop&h=590&w=448&q=mediumHigh'
+                      }
+                    />
+                  </div>
+                </CCol>
+                <CCol xs={4}>
+                  <div id={'booking-img-1'}>
+                    <h5>Apart Hotel</h5>
+                    <img
+                      src={
+                        'https://forever.travel-assets.com/flex/flexmanager/images/2023/11/24/a397c648-7662-440b-b023-65a2f5c41623.jpeg?impolicy=fcrop&h=590&w=448&q=mediumHigh'
+                      }
+                    />
+                  </div>
+                </CCol>
+              </CRow>
+              <br />
+              <CRow>
+                <CCol xs={6}>
+                  <div id={'booking-img-1'}>
+                    <h5>Ella</h5>
+                    <img
+                      src={
+                        'https://cf.bstatic.com/xdata/images/city/600x600/685291.jpg?k=df198931295a3a24c278b32556c0779cd74e95a239489a7fe98d89eb2aed72ee&o='
+                      }
+                    />
+                  </div>
+                </CCol>
+                <CCol xs={6}>
+                  <div id={'booking-img-1'}>
+                    <h5>Kandy</h5>
+                    <img
+                      src={
+                        'https://cf.bstatic.com/xdata/images/city/600x600/685330.jpg?k=ee4ac422e47649d2d04a9759dc81fa51f138f477796a8043557e864517ae6f5f&o='
+                      }
+                    />
+                  </div>
+                </CCol>
+              </CRow>
+            </div>
+          )}
         </CCardBody>
       </CCard>
     )
   }
 }
 
-export default Booking
+export default Hotels

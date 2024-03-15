@@ -14,6 +14,8 @@ import 'simplebar/dist/simplebar.min.css'
 
 // sidebar nav config
 import navigation from '../_nav'
+import navigationAdmin from '../_navAdmin'
+import Cookies from 'js-cookie'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()
@@ -31,7 +33,13 @@ const AppSidebar = () => {
     >
       <CSidebarNav>
         <SimpleBar>
-          <AppSidebarNav items={navigation} />
+          <AppSidebarNav
+            items={
+              Cookies.get('ghh_user') && JSON.parse(Cookies.get('ghh_user')).role === 'USER'
+                ? navigation
+                : navigationAdmin
+            }
+          />
         </SimpleBar>
       </CSidebarNav>
       <CSidebarToggler

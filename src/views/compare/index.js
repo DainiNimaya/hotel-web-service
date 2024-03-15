@@ -13,6 +13,8 @@ import {
   CTable,
 } from '@coreui/react'
 import * as API from '../../service/BookingService'
+import * as API_ from '../../service/AirBnbService'
+import * as API_H from '../../service/HotelsService'
 import SearchData from '../../components/searchData'
 
 const columnsBooking = [{ key: 'booking', label: 'Booking.com' }]
@@ -21,30 +23,107 @@ const columnsHotels = [{ key: 'hotels', label: 'Hotels.com' }]
 
 class Booking extends React.Component {
   state = {
-    data: [
-      {
-        name: 'Marino Beach Colombo',
-        location: 'Colombo',
-        price: '',
-        imgUrl:
-          'https://cf.bstatic.com/xdata/images/hotel/square200/156672332.jpg?k=b4f3d04cbc8b0c80193f63046e63e576ba1a50fc9f48289aa152f10a026aab4d&o=',
-        roomName: '',
-      },
-    ],
+    bookingData: [],
+    airbnbData: [],
+    hotelsData: [],
   }
 
   componentDidMount() {}
 
   searchHotelDetails = async (data) => {
-    const result = await API.getSearchDetail(data)
+    const result = await API.getSearchBookingDetail(data)
     await this.setState({
-      data: result,
+      bookingData: result,
+    })
+
+    const result2 = await API_.getSearchAirBnbDetail(data)
+    await this.setState({
+      airbnbData: result2,
+    })
+
+    const result3 = await API_H.getSearchHotelsDetail(data)
+    await this.setState({
+      hotelsData: result3,
     })
   }
 
   render() {
-    let bookingDiv = this.state.data.map((item, index) => {
-      return { booking: <div key={index}>{item.name}</div> }
+    let bookingDiv = this.state.bookingData.map((item, index) => {
+      return {
+        booking: (
+          <div key={index}>
+            <CRow>
+              {/*<CCol xs={4}>*/}
+              {/*<CCardImage*/}
+              {/*style={{ width: '130px', height: '110px' }}*/}
+              {/*orientation="top"*/}
+              {/*src={item.imgUrl}*/}
+              {/*/>*/}
+              {/*</CCol>*/}
+              <CCol xs={12}>
+                <CCardTitle>{item.name}</CCardTitle>
+                <p className={'mb-1'}>{item.roomName}</p>
+                <p>{item.price}</p>
+                <CButton href="#" size="sm">
+                  Check Availability
+                </CButton>
+              </CCol>
+            </CRow>
+          </div>
+        ),
+      }
+    })
+
+    let airbnbDiv = this.state.airbnbData.map((item, index) => {
+      return {
+        airbnb: (
+          <div key={index}>
+            <CRow>
+              {/*<CCol xs={4}>*/}
+              {/*<CCardImage*/}
+              {/*style={{ width: '130px', height: '110px' }}*/}
+              {/*orientation="top"*/}
+              {/*src={item.imgUrl}*/}
+              {/*/>*/}
+              {/*</CCol>*/}
+              <CCol xs={12}>
+                <CCardTitle>{item.name}</CCardTitle>
+                <p className={'mb-1'}>{item.roomName}</p>
+                <p>{item.price}</p>
+                <CButton href="#" size="sm">
+                  Check Availability
+                </CButton>
+              </CCol>
+            </CRow>
+          </div>
+        ),
+      }
+    })
+
+    let hotelsDiv = this.state.hotelsData.map((item, index) => {
+      return {
+        hotels: (
+          <div key={index}>
+            <CRow>
+              {/*<CCol xs={4}>*/}
+              {/*<CCardImage*/}
+              {/*style={{ width: '130px', height: '110px' }}*/}
+              {/*orientation="top"*/}
+              {/*src={item.imgUrl}*/}
+              {/*/>*/}
+              {/*</CCol>*/}
+              <CCol xs={12}>
+                <CCardTitle>{item.name}</CCardTitle>
+                <p className={'mb-1'}>{item.roomName}</p>
+                <p>{item.price}</p>
+                <CButton href="#" size="sm">
+                  Check Availability
+                </CButton>
+              </CCol>
+            </CRow>
+          </div>
+        ),
+      }
     })
 
     return (
@@ -56,10 +135,10 @@ class Booking extends React.Component {
               <CTable columns={columnsBooking} items={bookingDiv} />
             </CCol>
             <CCol xs={4}>
-              <CTable columns={columnsAirbnb} items={this.state.data} />
+              <CTable columns={columnsAirbnb} items={airbnbDiv} />
             </CCol>
             <CCol xs={4}>
-              <CTable columns={columnsHotels} items={this.state.data} />
+              <CTable columns={columnsHotels} items={hotelsDiv} />
             </CCol>
           </CRow>
         </CCardBody>
