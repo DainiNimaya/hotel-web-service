@@ -2,6 +2,9 @@ package com.boltan.hotelweb.utils;
 
 import com.boltan.hotelweb.dto.HotelDTO;
 import com.boltan.hotelweb.dto.request.HotelReqDTO;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -22,18 +25,38 @@ public class AirBnbScrape {
         try{
             List<HotelDTO> hotelList = new ArrayList<>();
             Document document = Jsoup.connect(url).get();
-            Elements hotels = document.select(".dir-ltr");
-            for(Element hotel: hotels){
-                String name = hotel.select(".dir-ltr > div > div > div > div > div > div > .lxq01kf atm_9s_1txwivl atm_am_kyuy1d atm_ar_d67k9l l1tup9az atm_1p4glcj_1bp4okc dir dir-ltr > div #title_23025533").text();
-//                String imgUrl = hotel.select(".c066246e13 > div > div > a > img").attr("src");
-//                String location = dto.getLocation();
-//
-//                String price = hotel.select(".c066246e13 > div > div > div > div > div > div > span > div > div > span ").text();
-//                if (price.isEmpty()) price = hotel.select(".c066246e13 > div > div > div > div > div > div > span ").text();
-//
-//                String roomName = hotel.select(".c066246e13 > div > div > div > div > div > div > div > h4 ").text();
-                System.out.println(name);
-                HotelDTO hotelDTO = new HotelDTO(name,"","","","");
+            String hotels = document.select("script#data-deferred-state-0").html();
+            JSONObject jsonObject = new JSONObject(hotels);
+
+            JSONArray niobeMinimalClientDataArray = jsonObject.getJSONArray("niobeMinimalClientData");
+
+            JSONArray firstElementArray = niobeMinimalClientDataArray.getJSONArray(0);
+            JSONObject nestedJsonObject = firstElementArray.getJSONObject(1);
+            JSONObject dataObject = nestedJsonObject.getJSONObject("data");
+            JSONObject presentationObject = dataObject.getJSONObject("presentation");
+            JSONObject staysSearchObject = presentationObject.getJSONObject("staysSearch");
+            JSONObject resultsObject = staysSearchObject.getJSONObject("results");
+            JSONArray searchResultsArray = resultsObject.getJSONArray("searchResults");
+
+
+            for (Object object : searchResultsArray) {
+
+                JSONObject jsonDataObj = (JSONObject) object;
+
+                JSONObject result = jsonDataObj.getJSONObject("listing");
+                String price = "";
+
+                Object pictureArray = result.getJSONArray("contextualPictures");
+
+                JSONObject picObject = ((JSONArray) pictureArray).getJSONObject(0);
+                JSONObject pricingQuoteObj = (JSONObject) object;
+                JSONObject pricingQuote = pricingQuoteObj.getJSONObject("pricingQuote");
+                JSONObject priceObj = pricingQuote.getJSONObject("structuredStayDisplayPrice");
+                JSONObject pricePrimaryLine = priceObj.getJSONObject("primaryLine");
+
+                price = pricePrimaryLine.has("price") ? pricePrimaryLine.getString("price") : pricePrimaryLine.getString("discountedPrice");
+
+                HotelDTO hotelDTO = new HotelDTO(result.getString("title"),dto.getLocation(),price,picObject.getString("picture"),result.getString("name"));
                 hotelList.add(hotelDTO);
             }
 

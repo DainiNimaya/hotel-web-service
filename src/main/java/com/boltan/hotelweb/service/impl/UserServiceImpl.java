@@ -6,6 +6,7 @@ import com.boltan.hotelweb.dto.request.CreateUserReqDTO;
 import com.boltan.hotelweb.dto.request.LoginReqDTO;
 import com.boltan.hotelweb.dto.response.TokenResponseDTO;
 import com.boltan.hotelweb.entity.UserEntity;
+import com.boltan.hotelweb.enums.Role;
 import com.boltan.hotelweb.exception.CustomException;
 import com.boltan.hotelweb.repository.SearchHistoryRepository;
 import com.boltan.hotelweb.repository.UserRepository;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 import java.util.List;
 
 import static com.google.common.hash.Hashing.sha256;
@@ -44,6 +46,8 @@ public class UserServiceImpl implements UserService {
         try{
             log.info("Execute method createUser");
 
+            System.out.println(new Date());
+
             UserEntity user = userRepository.findByUsername(dto.getUsername());
             if (user != null) throw new CustomException(false,"This username already exists.");
 
@@ -52,6 +56,7 @@ public class UserServiceImpl implements UserService {
             dto.setPassword(password);
 
             user = modelMapper.map(dto,UserEntity.class);
+            user.setJoinedDate(new Date());
 
             userRepository.save(user);
             dto.setPassword("**");
@@ -113,6 +118,8 @@ public class UserServiceImpl implements UserService {
             user.setFirstName(dto.getFirstName());
             user.setLastName(dto.getLastName());
             user.setEmail(dto.getEmail());
+            user.setJoinedDate(new Date());
+            user.setStatus(dto.getStatus());
 
             userRepository.save(user);
             dto.setPassword(null);
@@ -124,8 +131,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> getAllUsers() {
-        List<UserDTO> allUsers = userRepository.getAllUsers();
+    public List<UserDTO> getAllUsers(Role role) {
+        List<UserDTO> allUsers = userRepository.getAllUsers(role);
         return allUsers;
     }
 
@@ -133,5 +140,25 @@ public class UserServiceImpl implements UserService {
     public List<SearchHistoryDTO> getUserSearchhistory(String username) {
         List<SearchHistoryDTO> searchHistory = searchHistoryRepository.getUserSearchHistory(username);
         return searchHistory;
+    }
+
+    @Override
+    public boolean changePassword(String username, String oldPassword, String newPassword) {
+        try{
+            log.info("Execute method changePassword");
+
+            UserEntity user = userRepository.findByUsername(username);
+            if(user == null) throw new CustomException(false, "User not found");
+
+            if(oldPassword != null) {
+//                String password = sha256().hashString(dto.getPassword(), StandardCharsets.UTF_8).toString();
+//                user.setPassword(password);
+            }
+
+            return true;
+        }catch (Exception e){
+            log.error("Method changePassword : ", e);
+            throw e;
+        }
     }
 }

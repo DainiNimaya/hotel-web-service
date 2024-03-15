@@ -11,6 +11,7 @@ import lombok.*;
 @ToString
 public class CreateUserReqDTO {
 
+    private long id;
     private String firstName;
     private String lastName;
     private String email;
@@ -18,5 +19,6 @@ public class CreateUserReqDTO {
     private String username;
     private String password;
     private Role userRole;
+    private String status;
 
 }

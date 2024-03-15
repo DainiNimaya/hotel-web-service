@@ -7,6 +7,7 @@ import com.boltan.hotelweb.service.HotelService;
 import com.boltan.hotelweb.service.SearchHistoryService;
 import com.boltan.hotelweb.utils.AirBnbScrape;
 import com.boltan.hotelweb.utils.BookingScrape;
+import com.boltan.hotelweb.utils.HotelsScrape;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class HotelServiceImpl implements HotelService {
 
     private final BookingScrape bookingScrape;
     private final AirBnbScrape airBnbScrape;
+    private final HotelsScrape hotelsScrape;
     private final SearchHistoryService searchHistoryService;
 
     @Override
@@ -36,7 +38,7 @@ public class HotelServiceImpl implements HotelService {
                     hotelList = bookingScrape.getDetails(dto);
                     break;
                 case "HOTELS":
-                    hotelList = bookingScrape.getDetails(dto);
+                    hotelList = hotelsScrape.getDetails(dto);
                     break;
                 case "AIRBNB":
                     hotelList = airBnbScrape.getDetails(dto);

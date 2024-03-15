@@ -1,9 +1,11 @@
 package com.boltan.hotelweb.entity;
 
 import com.boltan.hotelweb.enums.Role;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Date;
 
 
 @Entity
@@ -40,5 +42,12 @@ public class UserEntity {
 
     @Enumerated(EnumType.STRING)
     private Role userRole;
+
+    @Column
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
+    private Date joinedDate;
+
+    @Column(length = 255)
+    private String status;
 
 }

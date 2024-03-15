@@ -6,6 +6,7 @@ import com.boltan.hotelweb.dto.request.CreateUserReqDTO;
 import com.boltan.hotelweb.dto.request.LoginReqDTO;
 import com.boltan.hotelweb.dto.response.TokenResponseDTO;
 import com.boltan.hotelweb.entity.UserEntity;
+import com.boltan.hotelweb.enums.Role;
 
 import java.util.List;
 
@@ -18,7 +19,9 @@ public interface UserService {
 
     CreateUserReqDTO updateUser(CreateUserReqDTO dto);
 
-    List<UserDTO> getAllUsers();
+    List<UserDTO> getAllUsers(Role role);
 
     List<SearchHistoryDTO> getUserSearchhistory(String username);
+
+    boolean changePassword(String username, String oldPassword, String newPassword);
 }
